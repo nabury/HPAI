@@ -1,14 +1,11 @@
 ##########
 # Bangladesh HPAI simulation code
-# Single control or single switch
+# Single or multiphase control
 ##########
 
-setwd("OneDrive - University of Warwick (1)/HPAI Bangladesh")
-source("R scripts/HPAI_functions.R")
+setwd("")
+source("HPAI_functions.R")
 library(gtools)
-library(TeachingDemos)
-
-txtStart("Results/Active results/settings.txt") # Save settings to a text file
 
 #####
 # Choose settings 
@@ -31,7 +28,7 @@ switch_points <- 0 # Number of potential switch points
 trigger <- NA
 
 transmiss_change <- 1 # Change in transmissibility
-flock_size <- 1.5 # Change in chicken flock sizes
+flock_size <- 1 # Change in chicken flock sizes
 spark <- "off" # Can be on or off
 
 # Generally these do not need changing
@@ -40,8 +37,6 @@ infection_free <- 28 # Days with no new reported infections before control stops
 delay <- 7 # Time between vaccination and immunity
 efficacy <- 0.7 # Proportion of birds that are successfully vaccinated
 surveillance_time <- 4 # Days between infection and reporting for premises under active surveillance
-
-txtStop()
 
 #####
 # Main code section
@@ -327,12 +322,12 @@ for (m in loop) {
   summary_results[[m]] <- df
   
   # Save detailed results
-  outfile <- paste("Results/Active results/detailed_", m, ".rds", sep = "")
+  outfile <- paste("detailed_", m, ".rds", sep = "")
   saveRDS(individual_outbreak, outfile)
 }
 
 # Save summary results
-saveRDS(summary_results, "Results/Active results/summary_results.rds")
+saveRDS(summary_results, "summary_results.rds")
 
 
 
