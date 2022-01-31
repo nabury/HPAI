@@ -93,7 +93,7 @@ summary_results <- list()
 # Create list of all management permutations for switching strategies
 if (switch_type != 0) {
   management_permutations <- permutations(n = length(management_list), r = (switch_points + 1), v = management_list)
-  saveRDS(management_permutations, "Results/Active results/management_permutations.rds") # Save management permutations
+  saveRDS(management_permutations, "management_permutations.rds") # Save management permutations
   loop <- (1:nrow(management_permutations)) # Objects to loop over
 
 } else {
