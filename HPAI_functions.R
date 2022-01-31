@@ -9,7 +9,6 @@
 # Ring_culling: Ring culling function
 # Ring_vaccination: Ring vaccination function
 # Settings: Selects the correct management settings
-# IP_culling_hard: Hard IP culling function (WIP)
 
 ##########
 # IP_culling
@@ -481,77 +480,3 @@ Settings <- function(selector, management_options){
                    "type" = type, "priority" = priority, "coverage" = coverage)
   return(settings)
 }
-
-##########
-# IP_culling_hard
-# Hard IP culling function
-# WIP
-##########
-
-# IP_culling_hard <- function(results_df, IP_cull_list, limit, limit_type, current_t) { 
-#   
-#   # Function to implement IP culling
-#   #
-#   # INPUTS
-#   # results_df : data frame containing key information on all premises (see Iterate function for further details)
-#   # IP_cull_list: vector, list of premises waiting to be culled in order of priority
-#   # limit: integer, culling resource limit
-#   # current_t: integer, current outbreak day
-#   #
-#   # OUTPUTS
-#   # IP_cull_results: list containing updated results_df and IP_cull_list
-#   
-#   
-#   # Only run this block if there are premises in the IP cull list
-#   
-#   part_cull <- NA
-#   
-#   if (length(IP_cull_list) > 0) {
-#     
-#     # Counters to ensure limits are not exceeded
-#     premise_limit <- limit
-#     chicken_limit <- limit * 1000
-#     
-#     # If there is enough capacity to cull all IPs
-#     if (length(IP_cull_list) <= premise_limit & sum(results_df$Chickenno[IP_cull_list]) <= chicken_limit) {
-#       
-#       # Update status to culled
-#       results_df$status[IP_cull_list] <- -1
-#       results_df$cull_day[IP_cull_list] <- current_t
-#       # Clear IP list
-#       IP_cull_list <- numeric()
-#       
-#       # If there is not enough capacity to cull all IPs
-#     } else {
-#       # Find which IPs can be culled
-#       cumulative_total <- cumsum(results_df$Chickenno[IP_cull_list])
-#       if (limit_type == "soft") {
-#         to_cull <- IP_cull_list[1:min(sum(cumulative_total <= chicken_limit) + 1, premise_limit)]
-#       } else {
-#         if (results_df$Chickenno[IP_cull_list[1]] > chicken_limit) {
-#           to_cull <- 0
-#         } else {
-#           to_cull <- IP_cull_list[1:min(sum(cumulative_total <= chicken_limit), premise_limit)]
-#         }
-#       }
-#       
-#       # Find how many to cull from part culled IPs
-#       if (limit_type == "hard") {
-#         if (to_cull == 0) {
-#           part_cull <- chicken_limit
-#         } else {
-#           part_cull <- chicken_limit - cumulative_total[length(to_cull)]
-#         }
-#       }
-#       
-#       # Update status to culled
-#       results_df$status[to_cull] <- -1
-#       results_df$cull_day[to_cull] <- current_t
-#       
-#       # Update IP list
-#       IP_cull_list <- IP_cull_list[!IP_cull_list %in% to_cull]
-#     }
-#   }
-#   IP_cull_results <- list("df" = results_df, "IP_cull_list" = IP_cull_list, "part_cull" = part_cull)
-#   return(IP_cull_results)
-# }
