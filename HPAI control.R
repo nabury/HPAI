@@ -17,7 +17,6 @@ management_list <- c(1:87) # Subset of the management options list to use
 # All - 1:87
 
 wave <- 2 # Options: 2 or 5
-model <- "C" # Options: B or C
 area <- "division" # Options: district or division
 
 num_outbreaks <- 1000 # Number of outbreaks to generate
@@ -50,35 +49,16 @@ management_options <- readRDS("R files/management_options.rds")
 if (area == "district") {
   holdings <- readRDS("R files/dhaka_dist_data.rds") # Farm data
   distance_matrix <- readRDS("R files/dhaka_dist_distance_matrix.rds") # Distance between premises
-  if (wave == 2) {
-    if (model == "B") {
-      parameters <- readRDS("R files/w2_B_dist_parameters.rds") # Thinned parameter estimates
-    } else if (model == "C") {
-      parameters <- readRDS("R files/w2_C_dist_parameters.rds") # Thinned parameter estimates
-    }
-  } else if (wave == 5) {
-    if (model == "B") {
-      parameters <- readRDS("R files/w5_B_dist_parameters.rds") # Thinned parameter estimates
-    } else if (model == "C") {
-      parameters <- readRDS("R files/w5_C_dist_parameters.rds") # Thinned parameter estimates
-    }
-  }
+  # Thinned parameter estimates
+  if (wave == 2) {parameters <- readRDS("R files/w2_C_dist_parameters.rds")} 
+  else if (wave == 5) {parameters <- readRDS("R files/w5_C_dist_parameters.rds")} 
+
 } else if (area == "division") {
   holdings <- readRDS("R files/dhaka_div_data.rds") # Farm data
   distance_matrix <- readRDS("R files/dhaka_div_distance_matrix.rds") # Distance between farms
-  if (wave == 2) {
-    if (model == "B") {
-      parameters <- readRDS("R files/w2_B_div_parameters.rds") # Thinned parameter estimates
-    } else if (model == "C") {
-      parameters <- readRDS("R files/w2_C_div_parameters.rds") # Thinned parameter estimates
-    }
-  } else if (wave == 5) {
-    if (model == "B") {
-      parameters <- readRDS("R files/w5_B_div_parameters.rds") # Thinned parameter estimates
-    } else if (model == "C") {
-      parameters <- readRDS("R files/w5_C_div_parameters.rds") # Thinned parameter estimates
-    }
-  }
+  # Thinned parameter estimates
+  if (wave == 2) {parameters <- readRDS("R files/w2_C_div_parameters.rds")} 
+  else if (wave == 5) {parameters <- readRDS("R files/w5_C_div_parameters.rds")}
 }
 
 # Calculate density for proactive surveillance
