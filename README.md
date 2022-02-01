@@ -16,8 +16,8 @@ type - reactive or proactive (active surveillance only)
 priority - distance, population or density (active surveillance only)  
 coverage - 5 (low capacity), 10 (medium capacity) or 25 (high capacity). Active surveillance only.  
 
-**Please contact me directly for a copy of these files**
+**Please contact me directly for a copy of these files**  
 **dhaka_dist_data.rds** Holding data for the Dhaka district. Contains locations and chicken numbers.  
 **dhaka_div_data.rds** Holding data for the Dhaka division. Contains locations and chicken numbers.  
-dhaka_dist_data.rds
-dhaka_div_distance_matrix.rds
+**dhaka_dist_data.rds** Distance matrix for all premises in the Dhaka district.  
+**dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.  
