@@ -21,3 +21,7 @@ coverage - 5 (low capacity), 10 (medium capacity) or 25 (high capacity). Active 
 **dhaka_div_data.rds** Holding data for the Dhaka division. Contains locations and chicken numbers.  
 **dhaka_dist_data.rds** Distance matrix for all premises in the Dhaka district.  
 **dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.  
+**w2_C_dist_parameters.rds** Thinned parameter estimates for wave 2 at the district level.  
+**w5_C_dist_parameters.rds** Thinned parameter estimates for wave 5 at the district level.  
+**w2_C_div_parameters.rds** Thinned parameter estimates for wave 2 at the division level.  
+**w5_C_div_parameters.rds** Thinned parameter estimates for wave 5 at the division level.  
