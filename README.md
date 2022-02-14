@@ -16,7 +16,6 @@ type - reactive or proactive (active surveillance only)
 priority - distance, population or density (active surveillance only)  
 coverage - 5 (low capacity), 10 (medium capacity) or 25 (high capacity). Active surveillance only. 
 
-**dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.  
 **w2_C_dist_parameters.rds** Thinned parameter estimates for wave 2 at the district level.  
 **w5_C_dist_parameters.rds** Thinned parameter estimates for wave 5 at the district level.  
 **w2_C_div_parameters.rds** Thinned parameter estimates for wave 2 at the division level.  
