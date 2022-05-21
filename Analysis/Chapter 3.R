@@ -224,8 +224,8 @@ wave_2 <- real_world %>%
   dplyr::select(Date_of_inf, Tot_chickens, Date_culling) # Keep only needed columns
 
 # Simulation results
-w2_sim <- readRDS("Results/Verification/detailed_results4.rds")
-results <- readRDS("Results/Verification/outbreak_size_4.rds")
+w2_sim <- readRDS("Results/Verification/detailed_results_2.rds")
+results <- readRDS("Results/Verification/outbreak_size_2.rds")
 
 #####
 # Histogram of outbreak sizes
@@ -375,8 +375,8 @@ wave_5 <- real_world %>%
   dplyr::select(Date_of_inf, Tot_chickens, Date_culling) # Keep only needed columns
 
 # Simulation results
-w5_sim <- readRDS("Results/Verification/detailed_results8.rds")
-results <- readRDS("Results/Verification/outbreak_size_8.rds")
+w5_sim <- readRDS("Results/Verification/detailed_results_5.rds")
+results <- readRDS("Results/Verification/outbreak_size_5.rds")
 
 #####
 # Histogram of outbreak sizes
