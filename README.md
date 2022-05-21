@@ -27,4 +27,4 @@ coverage - 5 (low capacity), 10 (medium capacity) or 25 (high capacity). Active 
 **dhaka_dist_data.rds** Distance matrix for all premises in the Dhaka district.  
 **dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.  
 
-**Analyses folder** Contains code to recreate the data analysis and plots for each chapter.  
+**Analyses folder** Contains files with code to recreate the data analysis and plots for each relevant chapter.  
