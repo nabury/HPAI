@@ -25,4 +25,6 @@ coverage - 5 (low capacity), 10 (medium capacity) or 25 (high capacity). Active 
 **dhaka_dist_data.rds** Holding data for the Dhaka district. Contains locations and chicken numbers.  
 **dhaka_div_data.rds** Holding data for the Dhaka division. Contains locations and chicken numbers.  
 **dhaka_dist_data.rds** Distance matrix for all premises in the Dhaka district.  
-**dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.   
+**dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.  
+
+**Analyses folder** Contains code to recreate the data analysis and plots for each chapter.  
