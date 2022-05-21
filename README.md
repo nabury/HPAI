@@ -2,6 +2,7 @@
 **HPAI Bangladesh model and plot code**
 
 **Model code**
+**HPAI model verification.R** contains all the code required specifically for the verification model.  
 **HPAI control.R** contains the code to set up and run simulations of the HPAI Bangladesh model.     
 **HPAI_functions.R** contains the functions required in the HPAI control.R file.  
 
