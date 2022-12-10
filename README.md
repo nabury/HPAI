@@ -24,4 +24,5 @@ coverage - 5 (low capacity), 10 (medium capacity) or 25 (high capacity). Active 
 **dhaka_div_data.rds** Holding data for the Dhaka division. Contains locations and chicken numbers.  
 **dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.  
 
-**Analyses folder** Contains files with code to recreate the data analysis and plots for each relevant chapter.  
+**Analysis folder** Contains files with code to recreate the data analysis and plots for each relevant chapter.  
+**App folder** Contains all the code for the app, hosted at https://epimodelling.shinyapps.io/HPAIapp/  
