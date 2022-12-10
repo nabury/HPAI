@@ -7,7 +7,6 @@
 **HPAI_functions.R** contains the functions required in the HPAI control.R file.  
 
 **Data files**  
-Save in a directory named "R files" to automate selection of required data files when running simulations using HPAI control.R  
 **management_options.rds** Data frame of all potential management options.   
 Columns:   
 limit - 20 (low capacity), 50 (medium capacity) or 100 (high capacity)  
@@ -20,9 +19,9 @@ coverage - 5 (low capacity), 10 (medium capacity) or 25 (high capacity). Active 
 **w2_C_div_parameters.rds** Thinned parameter estimates for wave 2 at the division level.  
 **w5_C_div_parameters.rds** Thinned parameter estimates for wave 5 at the division level. 
 
-**Please contact me directly for a copy of these files**  
+**Due to file size, please contact me directly if you require a copy of these files**  
 **dhaka_div_data.rds** Holding data for the Dhaka division. Contains locations and chicken numbers.  
 **dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.  
 
 **Analysis folder** Contains files with code to recreate the data analysis and plots for each relevant chapter.  
-**App folder** Contains all the code for the app, hosted at https://epimodelling.shinyapps.io/HPAIapp/  
+**HPAI App folder** Contains all the code for the app, hosted at https://epimodelling.shinyapps.io/HPAIapp/  
