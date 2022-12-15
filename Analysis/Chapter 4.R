@@ -4,6 +4,7 @@
 
 setwd("")
 
+library(dampack)
 library(dplyr)
 library(ggplot2)
 library(plyr)
@@ -404,7 +405,7 @@ ggplot(averted) +
 ####################################################################################################
 
 ##########
-# Data management for Table 4.2 - 4.7
+# Data management for IEER (Table 4.2 - 4.7)
 ##########
 
 # Load files
@@ -417,12 +418,12 @@ management_options$limit = factor(management_options$limit, levels = c("100", "5
 management_options$control = factor(management_options$control, levels = c("1", "2", "3", "4"))
 
 # Create results analysis data frame
-w2_cost_median <- w2_cost_low <- w2_cost_high <- 
-  w2_cull_median <- w2_cull_low <- w2_cull_high <-
-  w2_delta_cull_median <- w2_delta_cull_low <- w2_delta_cull_high <- 
-  w5_cost_median <- w5_cost_low <- w5_cost_high <-
-  w5_cull_median <- w5_cull_low <- w5_cull_high <-
-  w5_delta_cull_median <- w5_delta_cull_low <- w5_delta_cull_high <-
+w2_cost_mean <- w2_cost_low <- w2_cost_high <- 
+  w2_cull_mean <- w2_cull_low <- w2_cull_high <-
+  w2_delta_cull_mean <- w2_delta_cull_low <- w2_delta_cull_high <- 
+  w5_cost_mean <- w5_cost_low <- w5_cost_high <-
+  w5_cull_mean <- w5_cull_low <- w5_cull_high <-
+  w5_delta_cull_mean <- w5_delta_cull_low <- w5_delta_cull_high <-
   rep(NA, nrow(management_options))
 
 # To calculate 95% range
@@ -457,17 +458,17 @@ for (i in 1:nrow(management_options)) {
     } else {
       cost <- as.numeric(management_options$coverage[i])/ 100 * 13340
     }
-  } else {
+  } else if (management_options$control[i] == 1) {
     cost <- rep(0, nrow(current)) # Comparator
   } 
   
-  w2_cost_median[i] <- signif(median(cost, na.rm = TRUE), 3) # Median cost
+  w2_cost_mean[i] <- signif(mean(cost, na.rm = TRUE), 3) # Mean cost
   w2_cost_low[i] <- signif(quantile(cost, low, na.rm = TRUE), 3) # Low % cost
   w2_cost_high[i] <- signif(quantile(cost, high, na.rm = TRUE), 3)  # High % cost
-  w2_cull_median[i] <- signif(median(cull, na.rm = TRUE), 3) # Median culls
+  w2_cull_mean[i] <- signif(mean(cull, na.rm = TRUE), 3) # Mean culls
   w2_cull_low[i] <- signif(quantile(cull, low, na.rm = TRUE), 3) # Low % culls
   w2_cull_high[i] <- signif(quantile(cull, high, na.rm = TRUE), 3)  # High % culls
-  w2_delta_cull_median[i] <- signif(median(delta_cull, na.rm = TRUE), 3) # Median cull change
+  w2_delta_cull_mean[i] <- signif(mean(delta_cull, na.rm = TRUE), 3) # Mean cull change
   w2_delta_cull_low[i] <- signif(quantile(delta_cull, low, na.rm = TRUE), 3) # Low % cull change
   w2_delta_cull_high[i] <- signif(quantile(delta_cull, high, na.rm = TRUE), 3)  # High % cull change
   
@@ -502,24 +503,24 @@ for (i in 1:nrow(management_options)) {
     cost <- rep(0, nrow(current)) # Comparator
   }
   
-  w5_cost_median[i] <- signif(median(cost, na.rm = TRUE), 3) # Median cost
+  w5_cost_mean[i] <- signif(mean(cost, na.rm = TRUE), 3) # Mean cost
   w5_cost_low[i] <- signif(quantile(cost, low, na.rm = TRUE), 3) # Low % cost
   w5_cost_high[i] <- signif(quantile(cost, high, na.rm = TRUE), 3)  # High % cost
-  w5_cull_median[i] <- signif(median(cull, na.rm = TRUE), 3) # Median culls
+  w5_cull_mean[i] <- signif(mean(cull, na.rm = TRUE), 3) # Mean culls
   w5_cull_low[i] <- signif(quantile(cull, low, na.rm = TRUE), 3) # Low % culls
   w5_cull_high[i] <- signif(quantile(cull, high, na.rm = TRUE), 3)  # High % culls
-  w5_delta_cull_median[i] <- signif(median(delta_cull, na.rm = TRUE), 3) # Median cull change
+  w5_delta_cull_mean[i] <- signif(mean(delta_cull, na.rm = TRUE), 3) # Mean cull change
   w5_delta_cull_low[i] <- signif(quantile(delta_cull, low, na.rm = TRUE), 3) # Low % cull change
   w5_delta_cull_high[i] <- signif(quantile(delta_cull, high, na.rm = TRUE), 3)  # High % cull change
 }
 
 cost_effect <- data.frame(management_options, 
-                          w2_cost_median, w2_cost_low, w2_cost_high,
-                          w2_cull_median, w2_cull_low, w2_cull_high,
-                          w2_delta_cull_median, w2_delta_cull_low, w2_delta_cull_high,
-                          w5_cost_median, w5_cost_low, w5_cost_high,
-                          w5_cull_median, w5_cull_low, w5_cull_high,
-                          w2_delta_cull_median, w2_delta_cull_low, w2_delta_cull_high)
+                          w2_cost_mean, w2_cost_low, w2_cost_high,
+                          w2_cull_mean, w2_cull_low, w2_cull_high,
+                          w2_delta_cull_mean, w2_delta_cull_low, w2_delta_cull_high,
+                          w5_cost_mean, w5_cost_low, w5_cost_high,
+                          w5_cull_mean, w5_cull_low, w5_cull_high,
+                          w5_delta_cull_mean, w5_delta_cull_low, w5_delta_cull_high)
 
 # Remove unused rows
 cost_effect <- cost_effect[c(1:24,27,30:52,54,57,59:81,84,87),]
@@ -530,8 +531,64 @@ cost_effect['management_ID'] <- rep(c("IP cull", "1km cull","2km cull","3km cull
                                       "Reactive-distance", "Reactive-popn", "Proactive-popn", "Proactive-density"), 3)
 
 ##########
+# Effort-effectiveness plane plots
+##########
+
+# plot(
+#   x,
+#   txtsize = 12,
+#   currency = "$",
+#   effect_units = "QALYs",
+#   label = c("frontier", "all", "none"),
+#   label_max_char = NULL,
+#   plot_frontier_only = FALSE,
+#   alpha = 1,
+#   n_x_ticks = 6,
+#   n_y_ticks = 6,
+#   xbreaks = NULL,
+#   ybreaks = NULL,
+#   xlim = NULL,
+#   ylim = NULL,
+#   xexpand = expansion(0.1),
+#   yexpand = expansion(0.1),
+#   max.iter = 20000,
+#   ...
+# )
+
+# Wave 2 culling
+w2_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & cost_effect$limit == 50),]
+a <- calculate_icers(w2_cull$w2_cost_mean, w2_cull$w2_delta_cull_mean, w2_cull$management_ID)
+plot(a, currency = "Premises culled", effect_units = "Chicken culls")
+
+# Wave 2 vaccination
+w2_vax <- cost_effect[((cost_effect$control == 1| cost_effect$control == 3) & cost_effect$limit == 50),]
+b <- calculate_icers(w2_vax$w2_cost_mean, w2_vax$w2_delta_cull_mean, w2_vax$management_ID)
+plot(b, currency = "Chickens vaccinated", effect_units = "Chicken culls")
+
+# Wave 2 surveillance
+w2_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & cost_effect$limit == 50),]
+c <- calculate_icers(w2_sur$w2_cost_mean, w2_sur$w2_delta_cull_mean, w2_sur$management_ID)
+plot(c, currency = "Premises under surveillance", effect_units = "Chicken culls")
+
+# Wave 5 culling
+w5_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & cost_effect$limit == 50),]
+d <- calculate_icers(w5_cull$w5_cost_mean, w5_cull$w5_delta_cull_mean, w5_cull$management_ID)
+plot(d, currency = "Premises culled", effect_units = "Chicken culls")
+
+# Wave 5 vaccination
+w5_vax <- cost_effect[((cost_effect$control == 1| cost_effect$control == 3) & cost_effect$limit == 50),]
+e <- calculate_icers(w5_vax$w5_cost_mean, w5_vax$w5_delta_cull_mean, w5_vax$management_ID)
+plot(e, currency = "Chickens vaccinated", effect_units = "Chicken culls")
+
+# Wave 5 surveillance
+w5_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & cost_effect$limit == 50),]
+f <- calculate_icers(w5_sur$w5_cost_mean, w5_sur$w5_delta_cull_mean, w5_sur$management_ID)
+plot(c, currency = "Premises under surveillance", effect_units = "Chicken culls")
+
+
+##########
 # Table 4.2
-# ICER wave 2 ring culling
+# IEER wave 2 ring culling
 ##########
 
 # Select ring culling and comparator strategies medium capacity
@@ -539,11 +596,11 @@ w2_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & c
 w2_cull <- w2_cull[,c(25,7:9,13:15)]
 
 # Sort by cost 
-w2_cull <- w2_cull[order(w2_cull$w2_cost_median), ]
+w2_cull <- w2_cull[order(w2_cull$w2_cost_mean), ]
 
 ##########
 # Table 4.3
-# ICER wave 2 ring vaccination
+# IEER wave 2 ring vaccination
 ##########
 
 # Select ring vaccination and comparator strategies medium capacity
@@ -551,11 +608,11 @@ w2_vax <- cost_effect[((cost_effect$control == 1| cost_effect$control == 3) & co
 w2_vax <- w2_vax[,c(25,7:9,13:15)]
 
 # Sort by cost 
-w2_vax <- w2_vax[order(w2_vax$w2_cost_median), ]
+w2_vax <- w2_vax[order(w2_vax$w2_cost_mean), ]
 
 ##########
 # Table 4.4
-# ICER wave 2 active surveillance
+# IEER wave 2 active surveillance
 ##########
 
 # Select surveillance and comparator strategies medium capacity
@@ -563,11 +620,12 @@ w2_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & co
 w2_sur <- w2_sur[,c(25,7:9,13:15)]
 
 # Sort by cost 
-w2_sur <- w2_sur[order(w2_sur$w2_cost_median), ]
+w2_sur <- w2_sur[order(w2_sur$w2_cost_mean), ]
+
 
 ##########
 # Table 4.5
-# ICER wave 5 ring culling
+# IEER wave 5 ring culling
 ##########
 
 # Select ring culling and comparator strategies medium capacity
@@ -575,11 +633,11 @@ w5_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & c
 w5_cull <- w5_cull[,c(25,16:18,22:24)]
 
 # Sort by cost 
-w5_cull <- w5_cull[order(w5_cull$w5_cost_median), ]
+w5_cull <- w5_cull[order(w5_cull$w5_cost_mean), ]
 
 ##########
 # Table 4.6
-# ICER wave 5 ring vaccination
+# IEER wave 5 ring vaccination
 ##########
 
 # Select ring vaccination and comparator strategies medium capacity
@@ -587,11 +645,11 @@ w5_vax <- cost_effect[((cost_effect$control == 1| cost_effect$control == 3) & co
 w5_vax <- w5_vax[,c(25,16:18,22:24)]
 
 # Sort by cost 
-w5_vax <- w5_vax[order(w5_vax$w5_cost_median), ]
+w5_vax <- w5_vax[order(w5_vax$w5_cost_mean), ]
 
 ##########
-# Table 4.7
-# ICER wave 5 active surveillance
+# Figure 4.11
+# IEER planes
 ##########
 
 # Select surveillance and comparator strategies medium capacity
@@ -599,7 +657,40 @@ w5_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & co
 w5_sur <- w5_sur[,c(25,16:18,22:24)]
 
 # Sort by cost 
-w5_sur <- w5_sur[order(w5_sur$w5_cost_median), ]
+w5_sur <- w5_sur[order(w5_sur$w5_cost_mean), ]
+write.xlsx(w5_sur, "w5_sur.xlsx")
+
+# Wave 2 culling
+w2_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & cost_effect$limit == 50),]
+a <- calculate_icers(w2_cull$w2_cost_mean, w2_cull$w2_delta_cull_mean, w2_cull$management_ID)
+plot(a, currency = "Premises culled", effect_units = "Chicken culls")
+
+# Wave 2 vaccination
+w2_vax <- cost_effect[((cost_effect$control == 1| cost_effect$control == 3) & cost_effect$limit == 50),]
+b <- calculate_icers(w2_vax$w2_cost_mean, w2_vax$w2_delta_cull_mean, w2_vax$management_ID)
+plot(b, currency = "Chickens vaccinated", effect_units = "Chicken culls")
+
+# Wave 2 surveillance
+w2_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & cost_effect$limit == 50),]
+c <- calculate_icers(w2_sur$w2_cost_mean, w2_sur$w2_delta_cull_mean, w2_sur$management_ID)
+plot(c, currency = "Premises under surveillance", effect_units = "Chicken culls")
+
+# Wave 5 culling
+w5_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & cost_effect$limit == 50),]
+d <- calculate_icers(w5_cull$w5_cost_mean, w5_cull$w5_delta_cull_mean, w5_cull$management_ID)
+plot(d, currency = "Premises culled", effect_units = "Chicken culls")
+
+# Wave 5 vaccination
+w5_vax <- cost_effect[((cost_effect$control == 1| cost_effect$control == 3) & cost_effect$limit == 50),]
+e <- calculate_icers(w5_vax$w5_cost_mean, w5_vax$w5_delta_cull_mean, w5_vax$management_ID)
+plot(e, currency = "Chickens vaccinated", effect_units = "Chicken culls")
+
+# Wave 5 surveillance
+w5_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & cost_effect$limit == 50),]
+f <- calculate_icers(w5_sur$w5_cost_mean, w5_sur$w5_delta_cull_mean, w5_sur$management_ID)
+plot(c, currency = "Premises under surveillance", effect_units = "Chicken culls")
+
+
 
 ##########
 # Table A.1
