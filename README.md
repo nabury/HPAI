@@ -1,4 +1,10 @@
 # HPAI
+
+Model and plotting code to accompany the thesis Bradbury, N (2023) *Computational approaches for optimising avian influenza outbreak control and disseminating research findings*
+
+For key references, please see the [Wiki] ()
+
+---
 **HPAI Bangladesh model and plot code**
 
 **Model code**
