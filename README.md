@@ -1,18 +1,34 @@
-# HPAI
+# HPAI Bangladesh model and plot code
 
 Model and plotting code to accompany the thesis Bradbury, N (2023) *Computational approaches for optimising avian influenza outbreak control and disseminating research findings*
 
 For key references, please see the [References](https://github.com/nabury/HPAI/wiki/References)
 
 ---
-**HPAI Bangladesh model and plot code**
 
-**Model code**
+### Analysis folder
+
+Contains files with code to recreate the plots for chapters 3-5 in files named Chapter 3.R, Chapter 4.R and Chapter 5.R respectively.  
+Download the entire folder and set it analysis folder as your working directory within the Chapter files. 
+The analysis folder contains all the data/results files needed to recreate the plots.
+
+---
+
+### HPAI App folder
+Contains all the code for the app, hosted at https://epimodelling.shinyapps.io/HPAIapp/  
+
+---
+
+### HPAI Model folder
+
+**Files containing the model code and required data**
+
+##### Code
 **HPAI model verification.R** contains all the code required specifically for the verification model.  
 **HPAI control.R** contains the code to set up and run simulations of the HPAI Bangladesh model.     
 **HPAI_functions.R** contains the functions required in the HPAI control.R file.  
 
-**Data files**  
+##### Data files
 **management_options.rds** Data frame of all potential management options.   
 Columns:   
 limit - 20 (low capacity), 50 (medium capacity) or 100 (high capacity)  
@@ -28,6 +44,3 @@ coverage - 5 (low capacity), 10 (medium capacity) or 25 (high capacity). Active 
 **Due to file size, please contact me directly if you require a copy of these files**  
 **dhaka_div_data.rds** Holding data for the Dhaka division. Contains locations and chicken numbers.  
 **dhaka_div_distance_matrix.rds** Distance matrix for all premises in the Dhaka division.  
-
-**Analysis folder** Contains files with code to recreate the data analysis and plots for each relevant chapter.  
-**HPAI App folder** Contains all the code for the app, hosted at https://epimodelling.shinyapps.io/HPAIapp/  
