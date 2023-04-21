@@ -14,12 +14,12 @@ The analysis folder contains all the data/results files needed to recreate the p
 
 ---
 
-### HPAI App folder
+### HPAI app folder
 Contains all the code for the app, hosted at https://epimodelling.shinyapps.io/HPAIapp/  
 
 ---
 
-### HPAI Model folder
+### HPAI model folder
 
 **Files containing the model code and required data**
 
