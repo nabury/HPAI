@@ -2,6 +2,7 @@
 # Plots chapter 5 #
 ###################
 
+# Set to wd containing plot code and associated files
 setwd("")
 
 library(cowplot)
@@ -16,9 +17,9 @@ library(tidyr)
 ###########
 
 # Load files
-low <- readRDS("Apps/HPAI App/low_trans.rds")
-med <- readRDS("Apps/HPAI App/med_trans.rds")
-high <- readRDS("Apps/HPAI App/high_trans.rds")
+low <- readRDS("low_trans.rds")
+med <- readRDS("med_trans.rds")
+high <- readRDS("high_trans.rds")
 
 # Subset into w2 and wave 5
 low_w2 <- low[low$wave == "Wave 2",]
@@ -100,6 +101,29 @@ quantile(med_w5$culled_premises, 0.95)
 quantile(high_w2$culled_premises, 0.95)
 quantile(high_w5$culled_premises, 0.95)
 
+###################################################################################################
+
+#########
+# Data management for single phase increased transmission results
+# Fig 5.1, 5.2, 5.5, 5.6, 5.7, 5.8
+#########
+
+# Load files and add transmissibility column
+low <- readRDS("low_trans.rds")
+low$trans <- rep("100%", nrow(low))
+
+med <- readRDS("med_trans.rds")
+med$trans <- rep("150%", nrow(med))
+
+high <- readRDS("high_trans.rds")
+high$trans <- rep("200%", nrow(high))
+
+# Merge dataframes 
+results_df <- rbind(low, med, high)
+
+# Change transmissibility to a factor
+results_df$trans <- factor(results_df$trans, levels = c("100%", "150%", "200%"))
+
 ##########
 # Figure 5.1 
 # Box plot
@@ -121,6 +145,8 @@ ggplot(results) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=45, hjust = 1))
 
+
+
 ##########
 # Figure 5.2
 # Box plot
@@ -141,137 +167,6 @@ ggplot(results) +
   ylab("Premises outbreak size") +
   theme_bw() +
   theme(axis.text.x = element_text(angle=45, hjust = 1))
-
-#####
-# Fig 5.3
-# Outbreak size histograms increased transmission
-# IP culling medium capacity
-#####
-# Wave 2 all premises data
-low <- readRDS("Results/Transmission single control/w2_div_100/summary_results.rds")
-med <- readRDS("Results/Transmission single control/w2_div_150/summary_results.rds")
-high <- readRDS("Results/Transmission single control/w2_div_200/summary_results.rds")
-
-obj <- 30
-
-p1 <- ggplot() +
-  geom_histogram(data = low[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
-  scale_x_log10() +
-  scale_y_continuous(breaks = c(100, 200, 300, 400, 500), 
-                     labels = c("0.1", "0.2", "0.3", "0.4", "0.5")) +
-  labs(x = "", y = "Frequency") +
-  theme_bw() +
-  theme(panel.border = element_blank()) 
-
-p2 <- ggplot() +
-  geom_histogram(data = med[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
-  scale_x_log10() +
-  scale_y_continuous(breaks = c(100, 200, 300, 400, 500), 
-                     labels = c("0.1", "0.2", "0.3", "0.4", "0.5"), 
-                     limits = c(0, 500)) +
-  labs(x = "", y = "") +
-  theme_bw() +
-  theme(panel.border = element_blank()) 
-
-p3 <- ggplot() +
-  geom_histogram(data = high[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
-  scale_x_log10() +
-  scale_y_continuous(breaks = c(100, 200, 300, 400, 500), 
-                     labels = c("0.1", "0.2", "0.3", "0.4", "0.5"),
-                     limits = c(0, 500)) +
-  labs(x = "", y = "") +
-  theme_bw() +
-  theme(panel.border = element_blank()) 
-
-# Wave 5 all premises data
-low <- readRDS("Results/Transmission single control/w5_div_100/summary_results.rds")
-med <- readRDS("Results/Transmission single control/w5_div_150/summary_results.rds")
-high <- readRDS("Results/Transmission single control/w5_div_200/summary_results.rds")
-
-obj <- 30
-
-p4 <- ggplot() +
-  geom_histogram(data = low[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
-  scale_x_log10() +
-  scale_y_continuous(breaks = c(200, 400, 600, 800),
-                     labels = c("0.2", "0.4", "0.6", "0.8")) +
-  labs(x = "", y = "Frequency") +
-  theme_bw() +
-  theme(panel.border = element_blank()) 
-
-p5 <- ggplot() +
-  geom_histogram(data = med[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
-  scale_x_log10() +
-  scale_y_continuous(breaks = c(200, 400, 600, 800),
-                     labels = c("0.2", "0.4", "0.6", "0.8"),
-                     limits = c(0, 800)) +
-  labs(x = "Premises outbreak size", y = "") +
-  theme_bw() +
-  theme(panel.border = element_blank()) 
-
-p6 <- ggplot() +
-  geom_histogram(data = high[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
-  scale_x_log10() +
-  scale_y_continuous(breaks = c(200, 400, 600, 800),
-                     labels = c("0.2", "0.4", "0.6", "0.8"),
-                     limits = c(0, 800)) +
-  labs(x = "", y = "") +
-  theme_bw() +
-  theme(panel.border = element_blank()) 
-
-plot <- plot_grid(p1, p2, p3,p4, p5, p6, nrow = 2)
-plot
-
-##########
-# Fig 5.4 Time series plot
-# Increased transmission wave 2 and 5 - IP culling, medium capacity.
-# Data management see below
-##########
-
-### INPUTS wave 2 ###
-wave <- 2
-management_option <- 30
-
-# Infected premises subplot
-w2_df <- premises_df
-results_df <- w2_df[1:300,] # Trim high values
-
-p1 <- ggplot(results_df) +
-  geom_line(aes(x = time, y = baseline_mean_premises, colour = "Baseline")) +
-  geom_line(aes(x = time, y = med_mean_premises, colour = "Medium")) +
-  geom_line(aes(x = time, y = high_mean_premises, colour = "High")) +
-  ylim(0,200) +
-  xlab("Outbreak duration (days)") +
-  ylab("Infected premises (mean)") +
-  scale_color_manual(name = "Transmissibility",
-                     breaks = c("Baseline", "Medium", "High"),
-                     values = c("Baseline"="#86a040", "Medium"="#5f4ebf", "High"="#cc8d30")) +
-  theme_minimal() +
-  theme(legend.position = "none") 
-
-### INPUTS wave 5 ###
-wave <- 5
-management_option <- 30
-
-# Infected premises subplot
-w5_df <- premises_df
-results_df <- w5_df[1:500,] # Trim high values
-
-p2 <- ggplot(results_df) +
-  geom_line(aes(x = time, y = baseline_mean_premises, colour = "Baseline")) +
-  geom_line(aes(x = time, y = med_mean_premises, colour = "Medium")) +
-  geom_line(aes(x = time, y = high_mean_premises, colour = "High")) +
-  xlab("Outbreak duration (days)") +
-  ylab("") +
-  scale_color_manual(name = "Transmissibility",
-                     breaks = c("Baseline", "Medium", "High"),
-                     values = c("Baseline"="#86a040", "Medium"="#5f4ebf", "High"="#cc8d30")) +
-  theme_minimal() +
-  theme(legend.position = "right") 
-
-# Grid plot
-plot <- plot_grid(p1, p2, nrow = 1, labels = c("Wave 2", "Wave 5"), hjust = -1)
-
 
 ##########
 # Figure 5.5
@@ -345,13 +240,142 @@ ggplot(results) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=45, hjust = 1))
 
+##############################################################################################################
+
+#####
+# Fig 5.3
+# Outbreak size histograms increased transmission
+# IP culling medium capacity
+#####
+
+# Wave 2 all premises data
+low <- readRDS("w2_div_100_summary_results.rds")
+med <- readRDS("w2_div_150_summary_results.rds")
+high <- readRDS("w2_div_200_summary_results.rds")
+
+obj <- 30
+
+p1 <- ggplot() +
+  geom_histogram(data = low[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
+  scale_x_log10() +
+  scale_y_continuous(breaks = c(100, 200, 300, 400, 500), 
+                     labels = c("0.1", "0.2", "0.3", "0.4", "0.5")) +
+  labs(x = "", y = "Frequency") +
+  theme_bw() +
+  theme(panel.border = element_blank()) 
+
+p2 <- ggplot() +
+  geom_histogram(data = med[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
+  scale_x_log10() +
+  scale_y_continuous(breaks = c(100, 200, 300, 400, 500), 
+                     labels = c("0.1", "0.2", "0.3", "0.4", "0.5"), 
+                     limits = c(0, 500)) +
+  labs(x = "", y = "") +
+  theme_bw() +
+  theme(panel.border = element_blank()) 
+
+p3 <- ggplot() +
+  geom_histogram(data = high[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
+  scale_x_log10() +
+  scale_y_continuous(breaks = c(100, 200, 300, 400, 500), 
+                     labels = c("0.1", "0.2", "0.3", "0.4", "0.5"),
+                     limits = c(0, 500)) +
+  labs(x = "", y = "") +
+  theme_bw() +
+  theme(panel.border = element_blank()) 
+
+# Wave 5 all premises data
+low <- readRDS("w5_div_100_summary_results.rds")
+med <- readRDS("w5_div_150_summary_results.rds")
+high <- readRDS("w5_div_200_summary_results.rds")
+
+obj <- 30
+
+p4 <- ggplot() +
+  geom_histogram(data = low[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
+  scale_x_log10() +
+  scale_y_continuous(breaks = c(200, 400, 600, 800),
+                     labels = c("0.2", "0.4", "0.6", "0.8")) +
+  labs(x = "", y = "Frequency") +
+  theme_bw() +
+  theme(panel.border = element_blank()) 
+
+p5 <- ggplot() +
+  geom_histogram(data = med[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
+  scale_x_log10() +
+  scale_y_continuous(breaks = c(200, 400, 600, 800),
+                     labels = c("0.2", "0.4", "0.6", "0.8"),
+                     limits = c(0, 800)) +
+  labs(x = "Premises outbreak size", y = "") +
+  theme_bw() +
+  theme(panel.border = element_blank()) 
+
+p6 <- ggplot() +
+  geom_histogram(data = high[[obj]], aes(outbreak_size), fill = I("#5aaa66"), col = I("black")) +
+  scale_x_log10() +
+  scale_y_continuous(breaks = c(200, 400, 600, 800),
+                     labels = c("0.2", "0.4", "0.6", "0.8"),
+                     limits = c(0, 800)) +
+  labs(x = "", y = "") +
+  theme_bw() +
+  theme(panel.border = element_blank()) 
+
+plot <- plot_grid(p1, p2, p3,p4, p5, p6, nrow = 2)
+plot
+
+##########
+# Fig 5.4 Time series plot
+# Increased transmission wave 2 and 5 - IP culling, medium capacity (30)
+##########
+
+results <- readRDS("Fig5-4.rds")
+
+# W2 Infected premises subplot
+w2_df <- results[[1]]
+results_df <- w2_df[1:300,] # Trim high values
+
+p1 <- ggplot(results_df) +
+  geom_line(aes(x = time, y = baseline_mean_premises, colour = "Baseline")) +
+  geom_line(aes(x = time, y = med_mean_premises, colour = "Medium")) +
+  geom_line(aes(x = time, y = high_mean_premises, colour = "High")) +
+  ylim(0,200) +
+  xlab("Outbreak duration (days)") +
+  ylab("Infected premises (mean)") +
+  scale_color_manual(name = "Transmissibility",
+                     breaks = c("Baseline", "Medium", "High"),
+                     values = c("Baseline"="#86a040", "Medium"="#5f4ebf", "High"="#cc8d30")) +
+  theme_minimal() +
+  theme(legend.position = "none", axis.title = element_text(size = 12,face = "bold")) 
+
+# W5 Infected premises subplot
+w5_df <- results[[2]]
+results_df <- w5_df[1:500,] # Trim high values
+
+p2 <- ggplot(results_df) +
+  geom_line(aes(x = time, y = baseline_mean_premises, colour = "Baseline")) +
+  geom_line(aes(x = time, y = med_mean_premises, colour = "Medium")) +
+  geom_line(aes(x = time, y = high_mean_premises, colour = "High")) +
+  xlab("Outbreak duration (days)") +
+  ylab("") +
+  scale_color_manual(name = "Transmissibility",
+                     breaks = c("Baseline", "Medium", "High"),
+                     values = c("Baseline"="#86a040", "Medium"="#5f4ebf", "High"="#cc8d30")) +
+  theme_minimal() +
+  theme(legend.position = "right", 
+        legend.text=element_text(size=12),
+        axis.title = element_text(size = 12,face = "bold")) 
+
+# Grid plot
+plot <- plot_grid(p1, p2, nrow = 1, labels = c("Wave 2", "Wave 5"), hjust = -1)
+plot
+
 ##########
 # Table 5.4
 ###########
 
 # Load files
-med <- readRDS("Apps/HPAI App/med_popn.rds")
-high <- readRDS("Apps/HPAI App/high_popn.rds")
+med <- readRDS("med_popn.rds")
+high <- readRDS("high_popn.rds")
 
 # Subset into w2 and wave 5
 med_w2 <- med[med$wave == "Wave 2",]
@@ -413,11 +437,32 @@ quantile(med_w5$culled_premises, 0.95)
 quantile(high_w2$culled_premises, 0.95)
 quantile(high_w5$culled_premises, 0.95)
 
+##############################################################################################################
+
+#########
+# Data management for single phase intensification results used for Fig 5.11 and 5.12
+#########
+
+# Load files and add population column
+low <- readRDS("low_trans.rds")
+low$popn <- rep("100%", nrow(low))
+
+med <- readRDS("med_popn.rds")
+med$popn <- rep("150%", nrow(med))
+
+high <- readRDS("high_popn.rds")
+high$popn <- rep("200%", nrow(high))
+
+# Merge dataframes 
+results_df <- rbind(low, med, high)
+
+# Change population to a factor
+results_df$popn <- factor(results_df$popn, levels = c("100%", "150%", "200%")) 
+
 ##########
 # Figure 5.11
 # Log transformed box plot
 # Outbreak size all scenarios wave 2 intensification
-# Data management see below
 ###########
 
 results <- filter(results_df, wave %in% "Wave 2")
@@ -448,15 +493,17 @@ ggplot(results) +
   theme_bw() +
   theme(axis.text.x = element_text(angle=45, hjust = 1))
 
+##############################################################################################################
+
 #####
 # Fig 5.13
 # Outbreak size histograms increased intensification
 # IP culling medium capacity
 #####
 # W2 all premises data
-low <- readRDS("Results/Transmission single control/w2_div_100/summary_results.rds")
-med <- readRDS("Results/Increased_Popn/w2_1.5/summary_results.rds")
-high <- readRDS("Results/Increased_Popn/w2_2/summary_results.rds")
+low <- readRDS("w2_div_100_summary_results.rds")
+med <- readRDS("popn_w2_1.5_summary_results.rds")
+high <- readRDS("popn_w2_2_summary_results.rds")
 
 obj <- 30
 
@@ -489,9 +536,9 @@ p3 <- ggplot() +
   theme(panel.border = element_blank()) 
 
 # W5 all premises data
-low <- readRDS("Results/Transmission single control/w5_div_100/summary_results.rds")
-med <- readRDS("Results/Increased_Popn/w5_1.5/summary_results.rds")
-high <- readRDS("Results/Increased_Popn/w5_2/summary_results.rds")
+low <- readRDS("w5_div_100_summary_results.rds")
+med <- readRDS("popn_w5_1.5_summary_results.rds")
+high <- readRDS("popn_w5_2_summary_results.rds")
 
 obj <- 30
 
@@ -526,19 +573,17 @@ p6 <- ggplot() +
   theme(panel.border = element_blank()) 
 
 plot <- plot_grid(p1, p2, p3, p4, p5, p6, nrow = 2)
+plot
 
 ##########
 # Fig 5.14 Time series plot
-# Increased intensification wave 2 and 5 - IP culling, low capacity.
-# Data management see below
+# Increased intensification wave 2 and 5 - IP culling, medium capacity (30).
 ##########
 
-### INPUTS wave 2 ###
-wave <- 2
-management_option <- 30
+results <- readRDS("Fig5-14.rds")
 
-# Infected premises subplot
-w2_df <- premises_df
+# Wave 2 Infected premises subplot
+w2_df <- results[[1]]
 
 results_df <- w2_df[1:400,] # Trim high values
 
@@ -555,13 +600,8 @@ p1 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none") 
 
-### INPUTS wave 5 ###
-wave <- 5
-management_option <- 30
-
-# Infected premises subplot
-w5_df <- premises_df
-
+# Wave 5 Infected premises subplot
+w5_df <- results[[2]]
 results_df <- w5_df[1:400,] # Trim high values
 
 p2 <- ggplot(results_df) +
@@ -583,16 +623,14 @@ plot
 ##########
 # Fig A 13 Time series plots
 # Increased transmission wave 2  
-# Ring cull 3km low, ring vaccination 7km medium, proactive surveillance high
-# Data mangement see below
+# Ring cull 3km low (4), ring vaccination 7km medium(47), proactive surveillance high (84)
 ##########
 
-### INPUTS 3km ring cull low ###
-wave <- 2
-management_option <- 4
+results <- readRDS("FigA13.rds")
 
-ring_cull <- premises_df
+# 3km ring cull low subplot
 
+ring_cull <- results[[1]]
 results_df <- ring_cull[1:500,] # Trim high values
 
 p1 <- ggplot(results_df) +
@@ -607,12 +645,9 @@ p1 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none")
 
-### INPUTS 7km ring vaccination medium ###
-wave <- 2
-management_option <- 47
+# 7km ring vaccination medium subplot 
 
-ring_vaxx <- premises_df
-
+ring_vaxx <- results[[2]]
 results_df <- ring_vaxx[1:500,] # Trim high values
 
 p2 <- ggplot(results_df) +
@@ -628,12 +663,9 @@ p2 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none")
 
-### INPUTS Proactive surveillance by population high ###
-wave <- 2
-management_option <- 84
+## Proactive surveillance by population high subplot
 
-proactive <- premises_df
-
+proactive <- results[[3]]
 results_df <- proactive[1:500,] # Trim high values
 
 p3 <- ggplot(results_df) +
@@ -656,15 +688,14 @@ plot
 ##########
 # Fig A 14 Time series plots
 # Increased transmission wave 5  
-# Ring cull 3km low, ring vaccination 7km medium, proactive surveillance high
-# Data mangement see below
+# Ring cull 3km low (4), ring vaccination 7km medium (47), proactive surveillance high (84)
 ##########
 
-### INPUTS 3km ring cull low ###
-wave <- 5
-management_option <- 4
+results <- readRDS("FigA14.rds")
 
-ring_cull <- premises_df
+# 3km ring cull low subplot
+
+ring_cull <- results[[1]]
 
 results_df <- ring_cull[1:400,] # Trim high values
 
@@ -680,11 +711,9 @@ p1 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none")
 
-### INPUTS 7km ring vaccination medium ###
-wave <- 5
-management_option <- 47
+# 7km ring vaccination medium subplot
 
-ring_vaxx <- premises_df
+ring_vaxx <- results[[2]]
 
 results_df <- ring_vaxx[1:400,] # Trim high values
 
@@ -701,11 +730,9 @@ p2 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none")
 
-### INPUTS Proactive surveillance by population high ###
-wave <- 5
-management_option <- 84
+# Proactive surveillance by population high subplot
 
-proactive <- premises_df
+proactive <- results[[3]]
 
 results_df <- proactive[1:400,] # Trim high values
 
@@ -729,15 +756,14 @@ plot
 ##########
 # Fig A 15 Time series plots
 # Increased intensification wave 2  
-# Ring cull 3km low, ring vaccination 7km medium, proactive surveillance high
-# Data mangement see below
+# Ring cull 3km low (4), ring vaccination 7km medium (47), proactive surveillance high (84)
 ##########
 
-### INPUTS 3km ring cull low ###
-wave <- 2
-management_option <- 4
+results <- readRDS("FigA15.rds")
 
-ring_cull <- premises_df
+# 3km ring cull low subplot
+
+ring_cull <- results[[1]]
 
 results_df <- ring_cull[1:500,] # Trim high values
 
@@ -754,11 +780,9 @@ p1 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none")
 
-### INPUTS 7km ring vaccination medium ###
-wave <- 2
-management_option <- 47
+# 7km ring vaccination medium subplot
 
-ring_vaxx <- premises_df
+ring_vaxx <- results[[2]]
 
 results_df <- ring_vaxx[1:500,] # Trim high values
 
@@ -775,11 +799,9 @@ p2 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none")
 
-### INPUTS Proactive surveillance by population high ###
-wave <- 2
-management_option <- 84
+# Proactive surveillance by population high subplot
 
-proactive <- premises_df
+proactive <- results[[3]]
 
 results_df <- proactive[1:500,] # Trim high values
 
@@ -803,15 +825,14 @@ plot
 ##########
 # Fig A 16 Time series plots
 # Increased intensification wave 5  
-# Ring cull 3km low, ring vaccination 7km medium, proactive surveillance high
-# Data mangement see below
+# Ring cull 3km low (4), ring vaccination 7km medium (47), proactive surveillance high (84)
 ##########
 
-### INPUTS 3km ring cull low ###
-wave <- 5
-management_option <- 4
+results <- readRDS("FigA16.rds")
 
-ring_cull <- premises_df
+# 3km ring cull low subplot
+
+ring_cull <- results[[1]]
 
 results_df <- ring_cull[1:750,] # Trim high values
 
@@ -828,11 +849,9 @@ p1 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none")
 
-### INPUTS 7km ring vaccination medium ###
-wave <- 5
-management_option <- 47
+# 7km ring vaccination medium subplot
 
-ring_vaxx <- premises_df
+ring_vaxx <- results[[2]]
 
 results_df <- ring_vaxx[1:750,] # Trim high values
 
@@ -849,11 +868,9 @@ p2 <- ggplot(results_df) +
   theme_minimal() +
   theme(legend.position = "none")
 
-### INPUTS Proactive surveillance by population high ###
-wave <- 5
-management_option <- 84
+# Proactive surveillance by population high subplot
 
-proactive <- premises_df
+proactive <- results[[3]]
 
 results_df <- proactive[1:750,] # Trim high values
 
@@ -874,144 +891,5 @@ p3 <- ggplot(results_df) +
 plot <- plot_grid(p1, p2, p3, nrow = 1, labels = c("A", "B", "C"))
 plot
 
-
-###############################################################################################
-
-#########
-# Data management for single phase increased transmission results
-# Fig 5.1, 5.2, 5.5, 5.6, 5.7, 5.8
-#########
-
-# Load files and add transmissibility column
-low <- readRDS("Apps/HPAI App/low_trans.rds")
-low$trans <- rep("100%", nrow(low))
-
-med <- readRDS("Apps/HPAI App/med_trans.rds")
-med$trans <- rep("150%", nrow(med))
-
-high <- readRDS("Apps/HPAI App/high_trans.rds")
-high$trans <- rep("200%", nrow(high))
-
-# Merge dataframes 
-results_df <- rbind(low, med, high)
-
-# Change transmissibility to a factor
-results_df$trans <- factor(results_df$trans, levels = c("100%", "150%", "200%"))
-
-###
-# Data management for time series plots
-# Change inputs
-###
-
-### INPUTS ###
-
-# Load results files 
-
-infile_low <- paste("Results/Transmission single control/w", wave, "_div_100/detailed_", management_option, ".rds", sep = "")
-low <- readRDS(infile_low)
-low_reps <- length(low)
-
-# # Transmission
-# infile_med <- paste("Results/Transmission single control/w", wave, "_div_150/detailed_", management_option, ".rds", sep = "")
-# med <- readRDS(infile_med)
-# med_reps <- length(med)
-# 
-# infile_high <- paste("Results/Transmission single control/w", wave, "_div_200/detailed_", management_option, ".rds", sep = "")
-# high <- readRDS(infile_high)
-# high_reps <- length(high)
-
-# Intensification
-infile_med <- paste("Results/Increased_Popn/w", wave, "_1.5/detailed_", management_option, ".rds", sep = "")
-med <- readRDS(infile_med)
-med_reps <- length(med)
-
-infile_high <- paste("Results/Increased_Popn/w", wave, "_2/detailed_", management_option, ".rds", sep = "")
-high <- readRDS(infile_high)
-high_reps <- length(high)
-
-t <- 2000 # Max time - choose high value above highest outbreak duration
-
-# Baseline results
-premises_baseline <- list()
-
-for (i in 1:low_reps) {
-  # Infected premises
-  premises_baseline[[i]] <- low[[i]] %>%
-    count(IP_day) # Cases by day
-}
-
-# Convert to long format data frames
-premises_baseline <- rbindlist(premises_baseline) 
-
-# # Medium results
-premises_medium <- list()
-
-for (i in 1:med_reps) {
-  # Infected premises
-  premises_medium[[i]] <- med[[i]] %>%
-    count(IP_day) # Cases by day
-}
-
-# Convert to long format data frames
-premises_medium <- rbindlist(premises_medium) 
-
-# High results
-premises_high <- list()
-
-for (i in 1:high_reps) {
-  # Infected premises
-  premises_high[[i]] <- high[[i]] %>%
-    count(IP_day) # Cases by day
-}
-
-# # Convert to long format data frames
-premises_high <- rbindlist(premises_high) 
-
-# Calculate means 
-time <- c(1:t)
-baseline_mean_premises <- rep(NA,t)
-med_mean_premises <- rep(NA,t)
-high_mean_premises <- rep(NA,t)
-
-for (i in 1:t) {
-  
-  # Premises
-  sub <- premises_baseline[premises_baseline$IP_day==i]
-  baseline_mean_premises[i] <- mean(sub$n)
-  
-  sub <- premises_medium[premises_medium$IP_day==i]
-  med_mean_premises[i] <- mean(sub$n)
-  
-  sub <- premises_high[premises_high$IP_day==i]
-  high_mean_premises[i] <- mean(sub$n)
-}
-
-# Convert NaNs to zeros
-baseline_mean_premises[is.nan(baseline_mean_premises)] <- 0
-med_mean_premises[is.nan(med_mean_premises)] <- 0
-high_mean_premises[is.nan(high_mean_premises)] <- 0
-
-# Create final dataframe
-premises_df <- data.frame(time, baseline_mean_premises, med_mean_premises, high_mean_premises) # Convert to data frame
-
-#########
-# Data management for single phase intensification results used for Fig 5.11 and 5.12
-#########
-
-# Load files and add population column
-low <- readRDS("Apps/HPAI App/low_trans.rds")
-low$popn <- rep("100%", nrow(low))
-
-med <- readRDS("Apps/HPAI App/med_popn.rds")
-med$popn <- rep("150%", nrow(med))
-
-high <- readRDS("Apps/HPAI App/high_popn.rds")
-high$popn <- rep("200%", nrow(high))
-
-# Merge dataframes 
-results_df <- rbind(low, med, high)
-
-# Change population to a factor
-results_df$popn <- factor(results_df$popn, levels = c("100%", "150%", "200%")) 
 
 
