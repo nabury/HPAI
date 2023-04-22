@@ -2,7 +2,7 @@
 # Plots chapter 4 #
 ###################
 
-setwd("")
+setwd("/Users/u1658827/OneDrive - University of Warwick/HPAI Bangladesh")
 
 library(dampack)
 library(dplyr)
@@ -15,7 +15,7 @@ library(xlsx)
 # Box plots of chickens culls for ring culling simulations
 ##########
 
-results <- readRDS("Apps/HPAI App/fixed_results.rds")
+results <- readRDS("fixed_results.rds")
 results <- filter(results, control %in% c(1:11,30:40,59:69)) # Keep IP and ring culling
 
 ggplot(results) +
@@ -32,7 +32,7 @@ ggplot(results) +
 # Log transformed box plots of number of premises culled for ring culling simulations 
 ##########
 
-results <- readRDS("Apps/HPAI App/fixed_results.rds")
+results <- readRDS("fixed_results.rds")
 results <- filter(results, control %in% c(1:11,30:40,59:69)) # Keep IP and ring culling
 
 ggplot(results) +
@@ -50,7 +50,7 @@ ggplot(results) +
 # Box plots of chickens vaccinated for ring vaccination simulations
 ##########
 
-results <- readRDS("Apps/HPAI App/fixed_results.rds")
+results <- readRDS("fixed_results.rds")
 results <- filter(results, control %in% c(1,12:21,30,41:50,59,70:79)) # Keep IP and ring vaccination
 
 ggplot(results) +
@@ -67,7 +67,7 @@ ggplot(results) +
 # Box plots of premises vaccinated for ring vaccination simulations 
 ##########
 
-results <- readRDS("Apps/HPAI App/fixed_results.rds")
+results <- readRDS("fixed_results.rds")
 results <- filter(results, control %in% c(1,12:21,30,41:50,59,70:79)) # Keep IP and ring vaccination
 
 ggplot(results) +
@@ -84,7 +84,7 @@ ggplot(results) +
 # Log transformed box plots of outbreak durations for active surveillance strategies 
 ##########
 
-results <- readRDS("Apps/HPAI App/fixed_results.rds")
+results <- readRDS("fixed_results.rds")
 results <- filter(results, control %in% c(1,22:24,27,30,51,52,54,57,59,80,81,84,87)) # Keep IP and active surveillance
 
 ggplot(results) +
@@ -99,57 +99,14 @@ ggplot(results) +
 
 ####################################################################################################
 
-#####
-# Calculate premises under reactive surveillance for single phase incremental analysis
-#####
-
-# Load files
-management_options <- readRDS("R files/management_options.rds") # Management options file
-w2 <- readRDS("Results/Fixed single control/w2_div_fixed/summary_results.rds") # Wave 2
-w5 <- readRDS("Results/Fixed single control/w5_div_fixed/summary_results.rds") # Wave 5
-
-for (i in c(22,23,51,52,80,81)) {
-  # Wave 2
-  current <- paste("Results/Fixed single control/w2_div_fixed/detailed_", i, ".rds", sep = "")
-  detailed <- readRDS(current)
-  
-  # Create new vector
-  surveillance <- rep(NA, length(detailed))
-  
-  # Calculated premises under surveillance for each simulation
-  for (j in 1:length(detailed)) {surveillance[j] <- sum(detailed[[j]]$control_day > 0)}
-  
-  # Append to dataframe
-  w2[[i]] <- cbind(w2[[i]], surveillance)
-  
-  # Wave 5
-  current <- paste("Results/Fixed single control/w5_div_fixed/detailed_", i, ".rds", sep = "")
-  detailed <- readRDS(current)
-  
-  # Create new vector
-  surveillance <- rep(NA, length(detailed))
-  
-  # Calculated premises under surveillance for each simulation
-  for (j in 1:length(detailed)) {surveillance[j] <- sum(detailed[[j]]$control_day > 0)}
-  
-  # Append to dataframe
-  w5[[i]] <- cbind(w5[[i]], surveillance)
-}
-
-# Save appended results
-saveRDS(w2, "Results/Fixed single control/w2_div_fixed/summary_results.rds") 
-saveRDS(w5, "Results/Fixed single control/w5_div_fixed/summary_results.rds")
-
-####################################################################################################
-
 ##########
 # Data management for Fig 4.7 and 4.8
 ##########
 
 # Load files
-management_options <- readRDS("R files/management_options.rds") # Management options file
-w2 <- readRDS("Results/Fixed single control/w2_div_fixed/summary_results.rds") # Wave 2
-w5 <- readRDS("Results/Fixed single control/w5_div_fixed/summary_results.rds") # Wave 5
+management_options <- readRDS("management_options.rds") # Management options file
+w2 <- readRDS("w2_div_fixed_summary_results.rds") # Wave 2
+w5 <- readRDS("w5_div_fixed_summary_results.rds") # Wave 5
 
 # Change limit and control to factors
 management_options$limit = factor(management_options$limit, levels = c("100", "50", "20"))
@@ -231,7 +188,12 @@ ggplot(averted) +
   xlab("Management objective") +
   ylab("Averted chickens culled (millions)") +
   theme_bw() +
-  theme(axis.text.x = element_text(angle=45, hjust = 1), legend.position = "bottom", legend.title=element_blank())
+  theme(axis.text.x = element_text(angle=45, hjust = 1, size = 12), 
+        axis.title = element_text(size = 12,face = "bold"),
+        legend.position = "bottom", 
+        legend.title=element_blank(), 
+        legend.text=element_text(size=12),
+        strip.text.y = element_text(size = 12))
 
 ##########
 # Figure 4.8
@@ -255,7 +217,12 @@ ggplot(averted) +
   xlab("Management objective") +
   ylab("Averted chickens culled (millions)") +
   theme_bw() +
-  theme(axis.text.x = element_text(angle=45, hjust = 1), legend.position = "bottom", legend.title=element_blank())
+  theme(axis.text.x = element_text(angle=45, hjust = 1, size = 12), 
+        axis.title = element_text(size = 12,face = "bold"),
+        legend.position = "bottom", 
+        legend.title=element_blank(), 
+        legend.text=element_text(size=12),
+        strip.text.y = element_text(size = 12))
 
 ####################################################################################################
 
@@ -264,9 +231,9 @@ ggplot(averted) +
 ##########
 
 # Load files
-management_options <- readRDS("R files/management_options.rds") # Management options file
-w2 <- readRDS("Results/Fixed single control/w2_div_fixed/summary_results.rds") # Wave 2
-w5 <- readRDS("Results/Fixed single control/w5_div_fixed/summary_results.rds") # Wave 5
+management_options <- readRDS("management_options.rds") # Management options file
+w2 <- readRDS("w2_div_fixed_summary_results.rds") # Wave 2
+w5 <- readRDS("w5_div_fixed_summary_results.rds") # Wave 5
 
 # Change limit and control to factors
 management_options$limit = factor(management_options$limit, levels = c("100", "50", "20"))
@@ -377,7 +344,12 @@ ggplot(averted) +
   xlab("Management objective") +
   ylab("Averted chickens culled (thousands) per control intervention") +
   theme_bw() +
-  theme(axis.text.x = element_text(angle=45, hjust = 1), legend.position = "bottom", legend.title=element_blank())
+  theme(axis.text.x = element_text(angle=45, hjust = 1, size = 12), 
+        axis.title = element_text(size = 12,face = "bold"),
+        legend.position = "bottom", 
+        legend.title=element_blank(), 
+        legend.text=element_text(size=12),
+        strip.text.y = element_text(size = 12))
 
 ##########
 # Figure 4.10
@@ -400,18 +372,23 @@ ggplot(averted) +
   xlab("Management objective") +
   ylab("Averted chickens culled (thousands) per control intervention") +
   theme_bw() +
-  theme(axis.text.x = element_text(angle=45, hjust = 1), legend.position = "bottom", legend.title=element_blank())
+  theme(axis.text.x = element_text(angle=45, hjust = 1, size = 12), 
+        axis.title = element_text(size = 12,face = "bold"),
+        legend.position = "bottom", 
+        legend.title=element_blank(), 
+        legend.text=element_text(size=12),
+        strip.text.y = element_text(size = 12))
 
 ####################################################################################################
 
 ##########
-# Data management for IEER (Table 4.2 - 4.7)
+# Data management for IEER (Table 4.2 - 4.7) and Fig 4.11 + 4.12
 ##########
 
 # Load files
-management_options <- readRDS("R files/management_options.rds") # Management options file
-w2 <- readRDS("Results/Fixed single control/w2_div_fixed/summary_results.rds") # Wave 2
-w5 <- readRDS("Results/Fixed single control/w5_div_fixed/summary_results.rds") # Wave 5
+management_options <- readRDS("management_options.rds") # Management options file
+w2 <- readRDS("w2_div_fixed_summary_results.rds") # Wave 2
+w5 <- readRDS("w5_div_fixed_summary_results.rds") # Wave 5
 
 # Change limit and control to factors
 management_options$limit = factor(management_options$limit, levels = c("100", "50", "20"))
@@ -530,61 +507,6 @@ cost_effect['management_ID'] <- rep(c("IP cull", "1km cull","2km cull","3km cull
                                       "1km vacc","2km vacc","3km vacc","4km vacc","5km vacc","6km vacc","7km vacc","8km vacc","9km vacc","10km vacc",
                                       "Reactive-distance", "Reactive-popn", "Proactive-popn", "Proactive-density"), 3)
 
-##########
-# Effort-effectiveness plane plots
-##########
-
-# plot(
-#   x,
-#   txtsize = 12,
-#   currency = "$",
-#   effect_units = "QALYs",
-#   label = c("frontier", "all", "none"),
-#   label_max_char = NULL,
-#   plot_frontier_only = FALSE,
-#   alpha = 1,
-#   n_x_ticks = 6,
-#   n_y_ticks = 6,
-#   xbreaks = NULL,
-#   ybreaks = NULL,
-#   xlim = NULL,
-#   ylim = NULL,
-#   xexpand = expansion(0.1),
-#   yexpand = expansion(0.1),
-#   max.iter = 20000,
-#   ...
-# )
-
-# Wave 2 culling
-w2_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & cost_effect$limit == 50),]
-a <- calculate_icers(w2_cull$w2_cost_mean, w2_cull$w2_delta_cull_mean, w2_cull$management_ID)
-plot(a, currency = "Premises culled", effect_units = "Chicken culls")
-
-# Wave 2 vaccination
-w2_vax <- cost_effect[((cost_effect$control == 1| cost_effect$control == 3) & cost_effect$limit == 50),]
-b <- calculate_icers(w2_vax$w2_cost_mean, w2_vax$w2_delta_cull_mean, w2_vax$management_ID)
-plot(b, currency = "Chickens vaccinated", effect_units = "Chicken culls")
-
-# Wave 2 surveillance
-w2_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & cost_effect$limit == 50),]
-c <- calculate_icers(w2_sur$w2_cost_mean, w2_sur$w2_delta_cull_mean, w2_sur$management_ID)
-plot(c, currency = "Premises under surveillance", effect_units = "Chicken culls")
-
-# Wave 5 culling
-w5_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & cost_effect$limit == 50),]
-d <- calculate_icers(w5_cull$w5_cost_mean, w5_cull$w5_delta_cull_mean, w5_cull$management_ID)
-plot(d, currency = "Premises culled", effect_units = "Chicken culls")
-
-# Wave 5 vaccination
-w5_vax <- cost_effect[((cost_effect$control == 1| cost_effect$control == 3) & cost_effect$limit == 50),]
-e <- calculate_icers(w5_vax$w5_cost_mean, w5_vax$w5_delta_cull_mean, w5_vax$management_ID)
-plot(e, currency = "Chickens vaccinated", effect_units = "Chicken culls")
-
-# Wave 5 surveillance
-w5_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & cost_effect$limit == 50),]
-f <- calculate_icers(w5_sur$w5_cost_mean, w5_sur$w5_delta_cull_mean, w5_sur$management_ID)
-plot(c, currency = "Premises under surveillance", effect_units = "Chicken culls")
-
 
 ##########
 # Table 4.2
@@ -652,13 +574,13 @@ w5_vax <- w5_vax[order(w5_vax$w5_cost_mean), ]
 # IEER planes
 ##########
 
-# Select surveillance and comparator strategies medium capacity
-w5_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & cost_effect$limit == 50),]
-w5_sur <- w5_sur[,c(25,16:18,22:24)]
-
-# Sort by cost 
-w5_sur <- w5_sur[order(w5_sur$w5_cost_mean), ]
-write.xlsx(w5_sur, "w5_sur.xlsx")
+# # Select surveillance and comparator strategies medium capacity
+# w5_sur <- cost_effect[((cost_effect$control == 1| cost_effect$control == 4) & cost_effect$limit == 50),]
+# w5_sur <- w5_sur[,c(25,16:18,22:24)]
+# 
+# # Sort by cost 
+# w5_sur <- w5_sur[order(w5_sur$w5_cost_mean), ]
+# write.xlsx(w5_sur, "w5_sur.xlsx")
 
 # Wave 2 culling
 w2_cull <- cost_effect[((cost_effect$control == 1| cost_effect$control == 2) & cost_effect$limit == 50),]
@@ -699,9 +621,9 @@ plot(c, currency = "Premises under surveillance", effect_units = "Chicken culls"
 ##########
 
 # Load files
-management_options <- readRDS("R files/management_options.rds") # Management options file
+management_options <- readRDS("management_options.rds") # Management options file
 
-results <- readRDS("Results/Fixed single control/w2_div_fixed/summary_results.rds") # Wave 2
+results <- readRDS("w2_div_fixed_summary_results.rds") # Wave 2
 
 # Create results analysis data frame 
 premises_median <- premises_2.5 <- premises_97.5 <-
@@ -738,9 +660,9 @@ w2 <- w2[c(1:24,27,30:52,54,57,59:81,84,87),]
 ##########
 
 # Load files
-management_options <- readRDS("R files/management_options.rds") # Management options file
+management_options <- readRDS("management_options.rds") # Management options file
 
-results <- readRDS("Results/Fixed single control/w5_div_fixed/summary_results.rds") # Wave 5
+results <- readRDS("w5_div_fixed_summary_results.rds") # Wave 5
 
 # Create results analysis data frame
 premises_median <- premises_2.5 <- premises_97.5 <-
