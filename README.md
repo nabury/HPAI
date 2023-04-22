@@ -16,6 +16,7 @@ The analysis folder contains all the data/results files needed to recreate the p
 
 ### HPAI app folder
 Contains all the code for the app, hosted at https://epimodelling.shinyapps.io/HPAIapp/  
+For further information see the [User Guide](https://github.com/nabury/HPAI/wiki/HPAI-App-User-Guide)
 
 ---
 
