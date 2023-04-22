@@ -2,7 +2,7 @@
 # Plots chapter 3 #
 ###################
 
-setwd("")
+setwd("/Users/u1658827/OneDrive - University of Warwick/HPAI Bangladesh")
 
 library(cowplot)
 library(data.table)
@@ -216,7 +216,7 @@ plot
 ##########
 
 # Outbreak data
-real_world <- read_excel("HPAI_Outbreaks_2012_All.xlsx")
+real_world <- read_xlsx("HPAI_Outbreaks_2012_All.xlsx")
 
 # Wave 2 Dhaka division cases
 wave_2 <- real_world %>%
@@ -224,8 +224,8 @@ wave_2 <- real_world %>%
   dplyr::select(Date_of_inf, Tot_chickens, Date_culling) # Keep only needed columns
 
 # Simulation results
-w2_sim <- readRDS("Results/Verification/detailed_results_2.rds")
-results <- readRDS("Results/Verification/outbreak_size_2.rds")
+w2_sim <- readRDS("detailed_results_2.rds")
+results <- readRDS("outbreak_size_2.rds")
 
 #####
 # Histogram of outbreak sizes
@@ -277,26 +277,29 @@ w2_sim_cases <- rbindlist(w2_sim_cases) # Convert to long format data frame
 # Calculate summary results
 date <- seq(as.Date("2007-11-26"), as.Date("2008-05-19"), by="days")
 mean <- rep(NA,176)
+low <- rep(NA, 176)
 high <- rep(NA,176)
 
 for (i in 1:176) {
   sub <- w2_sim_cases[w2_sim_cases$inf_day==i]
   mean[i] <- mean(sub$n) # Calculate mean
-  high[i] <-  quantile(sub$n, 0.95) # Calculate 95th percentile
+  low[i] <-  quantile(sub$n, 0.025) # Calculate 2.5th percentile
+  high[i] <-  quantile(sub$n, 0.975) # Calculate 97.5th percentile
 }
 
-w2_sim_cases <- data.frame(date, mean, high) # Convert to data frame
+w2_sim_cases <- data.frame(date, mean, low, high) # Convert to data frame
 
 # Plot
 p2 <- ggplot(wave_2_cases) +
   geom_line(aes(x=Date_of_inf, y = n, colour = "Real world")) +
   geom_line(data = w2_sim_cases, aes(x = date, y = mean, colour = "Mean")) +
-  geom_line(data = w2_sim_cases, aes(x = date, y = high, colour = "95th percentile")) +
+  geom_ribbon(data = w2_sim_cases, aes(x = date, ymin = low, ymax = high, fill = "95% range"), alpha = 0.5) +
   xlab("Date") +
   ylab("Infected premises") +
-  scale_color_manual(name = "Time series",
-                     breaks = c("Real world", "Mean", "95th percentile"),
-                     values = c("Real world"="black", "Mean"="#167ee0", "95th percentile"="#db9723")) +
+  scale_color_manual(name = "",
+                     breaks = c("Real world", "Mean"),
+                     values = c("Real world"="black", "Mean"="#167ee0")) +
+  scale_fill_manual(name = "", values = c("95% range" = "grey")) +
   theme(legend.position = "top")
 
 #####
@@ -331,26 +334,29 @@ w2_sim_chickens <- rbindlist(w2_sim_chickens) # Convert to long format data fram
 # Calculate summary results
 date <- seq(as.Date("2007-11-26"), as.Date("2008-05-19"), by="days")
 mean <- rep(NA,176)
+low <- rep(NA, 176)
 high <- rep(NA,176)
 
 for (i in 1:176) {
   sub <- w2_sim_chickens[w2_sim_chickens$cull_day==i]
   mean[i] <- mean(sub$Culled_chickens) # Calculate mean
-  high[i] <-  quantile(sub$Culled_chickens, 0.95) # Calculate 95th percentile
+  low[i] <-  quantile(sub$Culled_chickens, 0.025) # Calculate 2.5th percentile
+  high[i] <-  quantile(sub$Culled_chickens, 0.975) # Calculate 97.5th percentile
 }
 
-w2_sim_chickens <- data.frame(date, mean, high) # Convert to data frame
+w2_sim_chickens <- data.frame(date, mean, low, high) # Convert to data frame
 
 # Plot
 p3 <- ggplot(wave_2_culled) +
   geom_line(aes(x = Date_culling, y = Chickens_culled, colour = "Real world")) +
   geom_line(data = w2_sim_chickens, aes(x = date, y = mean, colour = "Mean")) +
-  geom_line(data = w2_sim_chickens, aes(x = date, y = high, colour = "95th percentile")) +
+  geom_ribbon(data = w2_sim_chickens, aes(x = date, ymin = low, ymax = high, fill = "95% range"), alpha = 0.5) +
   xlab("Date") +
   ylab("Chickens culled") +
-  scale_color_manual(name = "Time series",
-                     breaks = c("Real world", "Mean", "95th percentile"),
-                     values = c("Real world"="black", "Mean"="#167ee0", "95th percentile"="#db9723")) +
+  scale_color_manual(name = "",
+                     breaks = c("Real world", "Mean"),
+                     values = c("Real world"="black", "Mean"="#167ee0")) +
+  scale_fill_manual(name = "", values = c("95% range" = "grey")) +
   theme(legend.position = "top")
 
 #####
@@ -375,8 +381,8 @@ wave_5 <- real_world %>%
   dplyr::select(Date_of_inf, Tot_chickens, Date_culling) # Keep only needed columns
 
 # Simulation results
-w5_sim <- readRDS("Results/Verification/detailed_results_5.rds")
-results <- readRDS("Results/Verification/outbreak_size_5.rds")
+w5_sim <- readRDS("detailed_results_5.rds")
+results <- readRDS("outbreak_size_5.rds")
 
 #####
 # Histogram of outbreak sizes
@@ -426,29 +432,32 @@ w5_sim_cases <- rbindlist(w5_sim_cases) # Convert to long format data frame
 # Calculate summary results
 date <- seq(as.Date("2011-01-01"), as.Date("2011-05-09"), by="days")
 mean <- rep(NA,129)
+low <- rep(NA, 129)
 high <- rep(NA,129)
 
 for (i in 1:129) {
   sub <- w5_sim_cases[w5_sim_cases$inf_day==i]
   mean[i] <- mean(sub$n) # Calculate mean
-  high[i] <-  quantile(sub$n, 0.95) # Calculate 95th percentile
+  low[i] <-  quantile(sub$n, 0.025) # Calculate 2.5th percentile
+  high[i] <-  quantile(sub$n, 0.975) # Calculate 97.5th percentile
 }
 
-w5_sim_cases <- data.frame(date, mean, high) # Convert to data frame
+w5_sim_cases <- data.frame(date, mean, low, high) # Convert to data frame
 
 # Plot
 p2 <- ggplot(wave_5_cases) +
   geom_line(aes(x=Date_of_inf, y = n, colour = "Real world")) +
   geom_line(data = w5_sim_cases, aes(x = date, y = mean, colour = "Mean")) +
-  geom_line(data = w5_sim_cases, aes(x = date, y = high, colour = "95th percentile")) +
+  geom_ribbon(data = w5_sim_cases, aes(x = date, ymin = low, ymax = high, fill = "95% range"), alpha = 0.5) +
   xlab("Date") +
   ylab("Infected premises") +
-  scale_color_manual(name = "Time series",
-                     breaks = c("Real world", "Mean", "95th percentile"),
-                     values = c("Real world"="black", "Mean"="#167ee0", "95th percentile"="#db9723")) +
+  scale_color_manual(name = "",
+                     breaks = c("Real world", "Mean"),
+                     values = c("Real world"="black", "Mean"="#167ee0")) +
+  scale_fill_manual(name = "", values = c("95% range" = "grey")) +
   theme(legend.position = "top")
 
-  
+
 #####
 # Wave 5 chickens
 #####
@@ -481,27 +490,30 @@ w5_sim_chickens <- rbindlist(w5_sim_chickens) # Convert to long format data fram
 # Calculate summary results
 date <- seq(as.Date("2011-01-01"), as.Date("2011-05-09"), by="days")
 mean <- rep(NA,129)
+low <- rep(NA, 129)
 high <- rep(NA,129)
 
 for (i in 1:129) {
   sub <- w5_sim_chickens[w5_sim_chickens$cull_day==i]
   mean[i] <- mean(sub$Culled_chickens) # Calculate mean
-  high[i] <-  quantile(sub$Culled_chickens, 0.95) # Calculate 95th percentile
+  low[i] <-  quantile(sub$Culled_chickens, 0.025) # Calculate 2.5th percentile
+  high[i] <-  quantile(sub$Culled_chickens, 0.975) # Calculate 97.5th percentile
 }
 
-w5_sim_chickens <- data.frame(date, mean, high) # Convert to data frame
+w5_sim_chickens <- data.frame(date, mean, low, high) # Convert to data frame
 
 # Plot
 p3 <- ggplot(wave_5_culled) +
   geom_line(aes(x = Date_culling, y = Chickens_culled, colour = "Real world")) +
   geom_line(data = w5_sim_chickens, aes(x = date, y = mean, colour = "Mean")) +
-  geom_line(data = w5_sim_chickens, aes(x = date, y = high, colour = "95th percentile")) +
+  geom_ribbon(data = w5_sim_chickens, aes(x = date, ymin = low, ymax = high, fill = "95% range"),alpha = 0.5) +
   scale_y_continuous(breaks = c(0, 100000, 200000, 300000), labels = c("0", "100,000", "200,000", "300,000")) +
   xlab("Date") +
   ylab("Chickens culled") +
-  scale_color_manual(name = "Time series",
-                     breaks = c("Real world", "Mean", "95th percentile"),
-                     values = c("Real world"="black", "Mean"="#167ee0", "95th percentile"="#db9723")) +
+  scale_color_manual(name = "",
+                     breaks = c("Real world", "Mean"),
+                     values = c("Real world"="black", "Mean"="#167ee0")) +
+  scale_fill_manual(name = "", values = c("95% range" = "grey")) +
   theme(axis.text.y = element_text(angle=45), legend.position = "top")
 
 
