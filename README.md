@@ -12,6 +12,8 @@ Contains files with code to recreate the plots for chapters 3-5 in files named C
 Download the entire folder and set it analysis folder as your working directory within the Chapter files. 
 The analysis folder contains all the data/results files needed to recreate the plots.
 
+**Note:** Please contact me directly if you require the data file 'bangladeshpoultrydata_clean.rds' for the Chapter 3 analysis
+
 ---
 
 ### HPAI app folder
