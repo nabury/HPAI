@@ -92,30 +92,29 @@ p2 <- ggplot() +
   theme_void() +
   labs(title = "1st December 2007")
 
+# Start of January
+wave_2_Apr <- data %>%
+  filter((Date_of_inf >= "2007-09-21 00:00:00 UTC") & (Date_of_inf <= "2008-01-02 00:00:00 UTC")) %>% # Keep only dates in range
+  dplyr::select(Date_of_inf, Y_Digital_North, X_Digital_East) # Keep only needed columns
+
+p3 <- ggplot() +
+  geom_point(data = wave_2_Apr, aes(x = X_Digital_East, y = Y_Digital_North), col = "#b23542") +
+  geom_polygon(data = Bangladesh, aes(x=long, y = lat, group = group), fill = NA, color = "black") +
+  coord_fixed(1.0) +
+  theme_void() +
+  labs(title = "1st January 2008")
+
 # Start of February
 wave_2_Feb <- data %>%
   filter((Date_of_inf >= "2007-09-21 00:00:00 UTC") & (Date_of_inf <= "2008-02-02 00:00:00 UTC")) %>% # Keep only dates in range
   dplyr::select(Date_of_inf, Y_Digital_North, X_Digital_East) # Keep only needed columns
 
-p3 <- ggplot() +
+p4 <- ggplot() +
   geom_point(data = wave_2_Feb, aes(x = X_Digital_East, y = Y_Digital_North), col = "#b23542") +
   geom_polygon(data = Bangladesh, aes(x=long, y = lat, group = group), fill = NA, color = "black") +
   coord_fixed(1.0) +
   theme_void() +
   labs(title = "1st February 2008")
-
-# Start of April
-wave_2_Apr <- data %>%
-  filter((Date_of_inf >= "2007-09-21 00:00:00 UTC") & (Date_of_inf <= "2008-04-02 00:00:00 UTC")) %>% # Keep only dates in range
-  dplyr::select(Date_of_inf, Y_Digital_North, X_Digital_East) # Keep only needed columns
-
-p4 <- ggplot() +
-  geom_point(data = wave_2_Apr, aes(x = X_Digital_East, y = Y_Digital_North), col = "#b23542") +
-  geom_polygon(data = Bangladesh, aes(x=long, y = lat, group = group), fill = NA, color = "black") +
-  coord_fixed(1.0) +
-  theme_void() +
-  labs(title = "1st April 2008")
-
 
 # End (19th May 2007)
 wave_2_end <- data %>%
@@ -169,30 +168,29 @@ p2 <- ggplot() +
   theme_void() +
   labs(title = "  1st February 2011")
 
+# Middle of February
+wave_5_Feb <- data %>%
+  filter((Date_of_inf >= "2011-01-01 00:00:00 UTC") & (Date_of_inf <= "2011-02-15 00:00:00 UTC")) %>% # Keep only dates in range
+  dplyr::select(Date_of_inf, Y_Digital_North, X_Digital_East) # Keep only needed columns
+
+p3 <- ggplot() +
+  geom_point(data = wave_5_Feb, aes(x = X_Digital_East, y = Y_Digital_North), col = "#b23542") +
+  geom_polygon(data = Bangladesh, aes(x=long, y = lat, group = group), fill = NA, color = "black") +
+  coord_fixed(1.0) +
+  theme_void() +
+  labs(title = "  14th February 2011")
+
 # Start of March
 wave_5_Mar <- data %>%
   filter((Date_of_inf >= "2011-01-01 00:00:00 UTC") & (Date_of_inf <= "2011-03-02 00:00:00 UTC")) %>% # Keep only dates in range
   dplyr::select(Date_of_inf, Y_Digital_North, X_Digital_East) # Keep only needed columns
 
-p3 <- ggplot() +
+p4 <- ggplot() +
   geom_point(data = wave_5_Mar, aes(x = X_Digital_East, y = Y_Digital_North), col = "#b23542") +
   geom_polygon(data = Bangladesh, aes(x=long, y = lat, group = group), fill = NA, color = "black") +
   coord_fixed(1.0) +
   theme_void() +
   labs(title = "  1st March 2011")
-
-# Start of April
-wave_5_Apr <- data %>%
-  filter((Date_of_inf >= "2011-01-01 00:00:00 UTC") & (Date_of_inf <= "2011-04-02 00:00:00 UTC")) %>% # Keep only dates in range
-  dplyr::select(Date_of_inf, Y_Digital_North, X_Digital_East) # Keep only needed columns
-
-p4 <- ggplot() +
-  geom_point(data = wave_5_Apr, aes(x = X_Digital_East, y = Y_Digital_North), col = "#b23542") +
-  geom_polygon(data = Bangladesh, aes(x=long, y = lat, group = group), fill = NA, color = "black") +
-  coord_fixed(1.0) +
-  theme_void() +
-  labs(title = "  1st April 2011")
-
 
 # End (9th May 2011)
 wave_5_end <- data %>%
